@@ -19,3 +19,4 @@ selenium-debug.log
 .env
 env/
 build/
+static/
