@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <h2 class="display-3">Users</h2>
+    <p class="subheading float">
+      Login as {{ this.$store.getters.fullname }}
+    </p>
     <v-btn
-      class="white--text"
+      class="white--text float mb-2"
       color="cyan lighten-2"
       @click="logout()"
     >
@@ -21,7 +24,7 @@
           <v-list-tile-content>
             <v-list-tile-title v-html="user.username" />
             <v-list-tile-sub-title>
-              2018/12/21 Fri
+              2018/12/23 Sat
             </v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -59,3 +62,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .float{
+    display: inline;
+  }
+</style>

@@ -19,14 +19,30 @@ export default new Vuex.Store({
     currentUser: null
   },
   getters: {
+    user (state, getters) {
+      if (!getters.isLogin) {
+        return ''
+      }
+      const user = JSON.parse(state.currentUser.user)
+      console.log(user[0].fields)
+      return user[0].fields
+    },
     isLogin (state) {
       return state.currentUser != null
+    },
+    username (state, getters) {
+      const user = getters.user
+      return user.username
+    },
+    fullname (state, getters) {
+      const user = getters.user
+      return `${user.last_name} ${user.first_name}`
     }
   },
   mutations: {
-    login (state, user) {
-      console.log(user)
-      state.currentUser = user
+    login (state, token) {
+      console.log(token.user)
+      state.currentUser = token
     },
     logout (state) {
       state.currentUser = null
@@ -34,28 +50,27 @@ export default new Vuex.Store({
   },
   actions: {
     checkToken: function ({ commit, state }) {
+      const token = localStorage.getItem('vue-authenticate.vueauth_token')
       axios.post('http://localhost:8000/api/check/', {
-        'token': localStorage.getItem('vue-authenticate.vueauth_token')
+        'token': token
       }).then((res) => {
-        console.log(res['status'])
         if (res.data.status === 'TOKEN_NOTFOUND') {
           commit('logout')
         } else {
-          console.log(res)
-          commit('login', res)
+          console.log(res.data)
+          commit('login', res.data)
         }
       }).catch((err) => {
         console.log(err)
         commit('logout')
       })
     },
-    authenticate_google: function ({ commit, state }, auth) {
+    authenticate_google: function ({ dispatch, commit, state }, auth) {
       console.log(auth)
       auth
         .authenticate('google', {provider: 'google-oauth2'})
         .then(function (res) {
-          console.log(res)
-          commit('login', res)
+          dispatch('checkToken')
         })
         .catch((err) => {
           console.log(err)

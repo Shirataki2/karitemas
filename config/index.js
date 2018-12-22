@@ -2,6 +2,7 @@
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
   dev: {
@@ -47,7 +48,16 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: false
+    cssSourceMap: false,
+    plugins: [
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'server',
+        generateStatsFile: true,
+        statsOptions: {source: false},
+        analyzerHost: 'localhost',
+        analyzerPort: '8008'
+      })
+    ]
   },
 
   build: {
@@ -79,5 +89,6 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  }
+  },
+
 }

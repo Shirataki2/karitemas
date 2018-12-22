@@ -3,15 +3,23 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from rest_framework.authtoken.models import Token
+from django.core import serializers
+from main.models import User
 
 
 @csrf_exempt
 @api_view(['POST'])
 def check_token(request):
-    token = Token.objects.filter(key=request.data['token']).exists()
+    user = Token.objects.filter(key=request.data['token'])
+    token = user.exists()
     if not token:
         return JsonResponse({"status": "TOKEN_NOTFOUND"})
-    return JsonResponse({"status": token})
+    return JsonResponse({"status": "SUCCESS",
+                         "user": serializers.serialize(
+                            "json",
+                            User.objects.filter(id=user[0].user.id)
+                           )
+                         })
 
 
 @csrf_exempt

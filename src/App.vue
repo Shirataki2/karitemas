@@ -79,7 +79,7 @@ export default {
   },
   mounted: function () {
     this.$store.dispatch('checkToken').then(() => {
-      console.log('Already log in')
+      console.log('Check token')
     })
     console.log(this.$auth)
   },
@@ -106,5 +106,9 @@ export default {
 <style lang="scss">
 p, div{
   font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+*::-webkit-scrollbar{
+    display:none;
 }
 </style>
