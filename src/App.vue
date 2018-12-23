@@ -27,7 +27,9 @@
         </h1>
       </template>
     </v-content>
-    <AppFooter :bottom-nav="bottomNav" :bottom-props="bottomProps" :color="color"/>
+    <template v-if="this.$store.getters.isLogin">
+      <AppFooter :bottom-nav="bottomNav" :bottom-props="bottomProps" :color="color"/>
+    </template>
   </v-app>
 </template>
 
@@ -42,21 +44,20 @@ export default {
       appName: 'Sample App',
       bottomNav: 0,
       bottomProps: [
-        { color: 'cyan lighten-2', text: 'ホーム', icon: 'home', click: () => {} },
-        { color: 'blue lighten-3', text: 'グループ', icon: 'fas fa-users', click: () => {} },
-        { color: 'indigo lighten-3', text: '通知', icon: 'notifications', click: () => {} },
-        { color: 'teal lighten-2', text: '設定', icon: 'settings', click: () => {} }
+        { color: 'cyan lighten-2', text: 'ホーム', icon: 'home', click: () => { this.$router.push('/') } },
+        { color: 'blue lighten-3', text: 'グループ', icon: 'fas fa-users', click: () => { this.$router.push('/group') } },
+        { color: 'indigo lighten-3', text: '通知', icon: 'notifications', click: () => { this.$router.push('/notification') } },
+        { color: 'teal lighten-2', text: '設定', icon: 'settings', click: () => { this.$router.push('/setting') } }
       ]
     }
   },
   props: {
     source: String
   },
-  mounted: function () {
+  beforeCreate: function () {
     this.$store.dispatch('checkToken').then(() => {
       console.log('Check token')
     })
-    console.log(this.$auth)
   },
   computed: {
     color () {

@@ -6,8 +6,8 @@ class Group(models.Model):
     STATUS_PRIVATE = "private"
     STATUS_PUBLIC = "public"
     STATUS = (
-        (STATUS_PRIVATE, "非公開"),
-        (STATUS_PUBLIC, "公開")
+        (STATUS_PRIVATE, "Private"),
+        (STATUS_PUBLIC, "Public")
     )
     name = models.CharField(max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
