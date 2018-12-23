@@ -12,10 +12,13 @@ import store from './store'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import VueAuthenticate from 'vue-authenticate'
 
 Vue.use(Vuex)
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  iconfont: 'fa'
+})
 Vue.use(VueAxios, axios)
 Vue.use(Vuelidate)
 Vue.use(VueAuthenticate, {

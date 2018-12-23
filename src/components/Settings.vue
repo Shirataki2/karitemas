@@ -1,0 +1,15 @@
+<template>
+  <h1 class="display-4">
+    Settings
+  </h1>
+</template>
+
+<script>
+export default {
+  name: 'Settings'
+}
+</script>
+
+<style scoped>
+
+</style>

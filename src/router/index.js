@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Home from '@/components/Home'
+import Group from '@/components/Group'
+import Notification from '@/components/Notification'
+import Settings from '@/components/Settings'
 
 Vue.use(Router)
 
@@ -8,8 +11,23 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/group',
+      name: 'Group',
+      component: Group
+    },
+    {
+      path: '/notification',
+      name: 'Notification',
+      component: Notification
+    },
+    {
+      path: '/setting',
+      name: 'Settings',
+      component: Settings
     }
   ],
   mode: 'history'

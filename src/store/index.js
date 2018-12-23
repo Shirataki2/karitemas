@@ -37,6 +37,10 @@ export default new Vuex.Store({
     fullname (state, getters) {
       const user = getters.user
       return `${user.last_name} ${user.first_name}`
+    },
+    email (state, getters) {
+      const user = getters.user
+      return `${user.email}`
     }
   },
   mutations: {
