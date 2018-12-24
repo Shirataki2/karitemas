@@ -1,8 +1,10 @@
-# karitemus
+# karitem.us
 
-> A Vue.js project
+[![CircleCI](https://circleci.com/gh/Shirataki2/karitemas/tree/master.svg?style=svg)](https://circleci.com/gh/Shirataki2/karitemas/tree/master)
 
-## Build Setup
+貸し借り管理Webアプリケーション
+
+## Build
 
 ``` bash
 # install dependencies
@@ -26,5 +28,3 @@ npm run e2e
 # run all tests
 npm test
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
