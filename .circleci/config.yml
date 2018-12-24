@@ -16,8 +16,8 @@ jobs:
       - run: python3 venv env && . env/bin/activate
       - run: pip3 install -r requirement.txt
       - run:
-        - command: python3 manage.py runserver
-        - background: true
+          command: python3 manage.py runserver
+          background: true
       - run: sleep 5
       - save_cache:
           paths:
