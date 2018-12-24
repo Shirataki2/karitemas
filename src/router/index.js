@@ -4,7 +4,8 @@ import Home from '@/components/Home'
 import Group from '@/components/Group'
 import Notification from '@/components/Notification'
 import Settings from '@/components/Settings'
-
+import User from '@/components/User'
+import Err404 from '@/components/Err404'
 Vue.use(Router)
 
 export default new Router({
@@ -28,6 +29,21 @@ export default new Router({
       path: '/setting',
       name: 'Settings',
       component: Settings
+    },
+    {
+      path: '/user/:id',
+      name: 'User',
+      component: User
+    },
+    {
+      path: '/404',
+      name: 'NotFound',
+      component: Err404
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: Err404
     }
   ],
   mode: 'history'

@@ -88,6 +88,16 @@ export default new Vuex.Store({
       }).catch((err) => {
         console.log(err)
       })
+    },
+    getUserById: function ({ commit }, id) {
+      axios.post('http://localhost:8000/api/uget/', {
+        'id': id
+      }).then((res) => {
+        console.log(res)
+        return res.data
+      }).catch(() => {
+        return null
+      })
     }
   }
 })

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import index, check_token, delete_token
+from .views import index, check_token, delete_token, get_user_by_id
 
 urlpatterns = list([
     path('admin/', admin.site.urls),
@@ -28,6 +28,7 @@ urlpatterns = list([
     path('api/login/', include('rest_social_auth.urls_jwt')),
     path('api/check/', check_token),
     path('api/delete_token/', delete_token),
+    path('api/uget/', get_user_by_id),
     path('', index, name='index'),
 ] + static(settings.STATIC_URL))
 # path('', include('social_django.urls'))
