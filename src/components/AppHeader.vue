@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="indigo darken-2" app absolute clipped-left dark>
+    <v-toolbar color="black" app absolute clipped-left dark>
       <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
       <span class="title ml-3 mr-5 ">{{appName}}</span>
       <v-text-field
@@ -86,7 +86,7 @@ export default {
           icon: 'fas fa-sign-out-alt',
           title: 'Sign Out',
           func: () => {
-            this.$store.dispatch('logout').then(() => {
+            this.$store.dispatch('logout', this.$router).then(() => {
               console.log('Log out!')
             })
           }
@@ -113,7 +113,7 @@ export default {
           icon: 'fab fa-google',
           title: 'Sign in with Google',
           func: () => {
-            this.$store.dispatch('authenticate_google', this.$auth).then(() => {
+            this.$store.dispatch('authenticate_google', [this.$auth, this.$router]).then(() => {
               console.log('Login!')
             })
           }

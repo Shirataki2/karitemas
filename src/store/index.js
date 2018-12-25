@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueAuthenticate from 'vue-authenticate'
+import VueFlashMessage from 'vue-flash-message'
 import axios from 'axios'
+
+Vue.use(VueFlashMessage)
 Vue.use(Vuex)
 Vue.use(VueAuthenticate, {
   baseUrl: 'http://localhost:8000',
@@ -23,9 +26,9 @@ export default new Vuex.Store({
       if (!getters.isLogin) {
         return ''
       }
-      const user = JSON.parse(state.currentUser.user)
-      console.log(user[0].fields)
-      return user[0].fields
+      const user = JSON.parse(state.currentUser.user)[0].fields
+      user.id = JSON.parse(state.currentUser.user)[0].pk
+      return user
     },
     isLogin (state) {
       return state.currentUser != null
@@ -45,7 +48,7 @@ export default new Vuex.Store({
   },
   mutations: {
     login (state, token) {
-      console.log(token.user)
+      console.log(JSON.parse(token.user)[0])
       state.currentUser = token
     },
     logout (state) {
@@ -53,50 +56,54 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    checkToken: function ({ commit, state }) {
+    checkToken: function ({ dispatch, commit, state }, router) {
       const token = localStorage.getItem('vue-authenticate.vueauth_token')
-      axios.post('http://localhost:8000/api/check/', {
+      return axios.post('http://localhost:8000/api/check/', {
         'token': token
       }).then((res) => {
         if (res.data.status === 'TOKEN_NOTFOUND') {
-          commit('logout')
+          dispatch('logout', router)
         } else {
-          console.log(res.data)
           commit('login', res.data)
         }
       }).catch((err) => {
         console.log(err)
-        commit('logout')
+        dispatch('logout', router)
       })
     },
-    authenticate_google: function ({ dispatch, commit, state }, auth) {
-      console.log(auth)
-      auth
+    authenticate_google: function ({ dispatch, commit, getters, state }, payload) {
+      const [auth, router] = [...payload]
+
+      return auth
         .authenticate('google', {provider: 'google-oauth2'})
-        .then(function (res) {
-          dispatch('checkToken')
+        .then(function () {
+          dispatch('checkToken', router).then(() => {
+            console.log(getters.user)
+            router.push('user/' + getters.user.id)
+          })
         })
         .catch((err) => {
-          console.log(err)
+          console.error(err)
         })
     },
-    logout: function ({commit}) {
-      axios.post('http://localhost:8000/api/delete_token/', {
+    logout: function ({commit}, router) {
+      return axios.post('http://localhost:8000/api/delete_token/', {
         'token': localStorage.getItem('vue-authenticate.vueauth_token')
       }).then(() => {
         commit('logout')
+        router.push('/')
       }).catch((err) => {
         console.log(err)
       })
     },
     getUserById: function ({ commit }, id) {
-      axios.post('http://localhost:8000/api/uget/', {
+      return axios.post('http://localhost:8000/api/uget/', {
         'id': id
       }).then((res) => {
         console.log(res)
         return res.data
       }).catch(() => {
-        return null
+        return ''
       })
     }
   }

@@ -44,7 +44,7 @@ export default {
       appName: 'Sample App',
       bottomNav: 0,
       bottomProps: [
-        { color: 'cyan lighten-2', text: 'ホーム', icon: 'home', click: () => { this.$router.push('/') } },
+        { color: 'cyan lighten-2', text: 'ホーム', icon: 'home', click: () => { this.$router.push('/user/' + this.$store.getters.user.id) } },
         { color: 'blue lighten-3', text: 'グループ', icon: 'fas fa-users', click: () => { this.$router.push('/group') } },
         { color: 'indigo lighten-3', text: '通知', icon: 'notifications', click: () => { this.$router.push('/notification') } },
         { color: 'teal lighten-2', text: '設定', icon: 'settings', click: () => { this.$router.push('/setting') } }
@@ -55,7 +55,7 @@ export default {
     source: String
   },
   beforeCreate: function () {
-    this.$store.dispatch('checkToken').then(() => {
+    this.$store.dispatch('checkToken', this.$router).then(() => {
       console.log('Check token')
     })
   },
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     loginWithGoogle () {
-      this.$store.dispatch('authenticate_google', this.$auth).then(() => {
+      this.$store.dispatch('authenticate_google', this.$auth, this.$router).then(() => {
         console.log('Login')
       })
     }
