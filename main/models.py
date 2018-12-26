@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Group(models.Model):
+class UserGroup(models.Model):
     STATUS_PRIVATE = "private"
     STATUS_PUBLIC = "public"
     STATUS = (
@@ -15,10 +15,10 @@ class Group(models.Model):
     status = models.CharField(
         choices=STATUS,
         default=STATUS_PRIVATE,
-        max_length=5
+        max_length=30
     )
 
-    users = models.ForeignKey(
+    users = models.ManyToManyField(
         User,
-        on_delete=models.PROTECT,
+        null=True
     )

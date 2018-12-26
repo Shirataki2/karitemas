@@ -50,10 +50,10 @@ export default {
 <style scoped>
   .main-card, .main-card>*{
     position: relative;
-    bottom: 80px;
+    bottom: 120px;
   }
   .my-avatar{
     position: relative;
-    bottom: 0px;
+    bottom: -20px;
   }
 </style>

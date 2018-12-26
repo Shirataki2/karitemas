@@ -1,31 +1,52 @@
 <template>
-  <v-bottom-nav
-    :active.sync="bottomNav"
-    :value="true"
-    :color="color"
-    absolute
-    shift
-  >
-    <v-btn
-      v-for="prop in bottomProps"
-      :key="prop.id"
-      :color="prop.color"
-      :value="prop.id"
-      @click="prop.click"
-      flat
+  <v-footer fixed>
+    <v-bottom-nav
+      :active.sync="bottomNav"
+      :value="true"
+      :color="color"
+      absolute
+      shift
     >
-      <span>{{ prop.text }}</span>
-      <v-icon>{{ prop.icon }}</v-icon>
-    </v-btn>
-  </v-bottom-nav>
+      <v-btn
+        v-for="prop in bottomProps"
+        :key="prop.id"
+        :color="prop.color"
+        :value="prop.id"
+        @click="prop.click"
+        flat
+      >
+        <span>{{ prop.text }}</span>
+        <v-icon>{{ prop.icon }}</v-icon>
+      </v-btn>
+    </v-bottom-nav>
+  </v-footer>
 </template>
 <script>
 export default {
   name: 'AppFooter',
+  data: () => ({
+    bottomNav: 0
+  }),
   props: {
-    bottomNav: {},
     bottomProps: {},
     color: {}
+  },
+  mounted () {
+    setInterval(() => { this.bottomNav = this.getPageId(this.$route.path) }, 50)
+  },
+  computed () {
+    this.bottomNav = this.getPageId(this.$route.path)
+  },
+  methods: {
+    getPageId: function (path) {
+      const path2id = {
+        '/group': 1,
+        '/notification': 2,
+        '/setting': 3
+      }
+      const idx = path in path2id ? path2id[path] : 0
+      return idx
+    }
   }
 }
 </script>

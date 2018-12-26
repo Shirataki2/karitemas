@@ -32,7 +32,6 @@ def delete_token(request):
 @csrf_exempt
 @api_view(['POST'])
 def get_user_by_id(request):
-    print(request.data)
     user = User.objects.filter(id=request.data['id'])
     if not user.exists():
         return JsonResponse({"status": "USER_NOTFOUND"})

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="black" app absolute clipped-left dark>
+    <v-toolbar color="black" app clipped-left dark fixed>
       <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
       <span class="title ml-3 mr-5 ">{{appName}}</span>
       <v-text-field
