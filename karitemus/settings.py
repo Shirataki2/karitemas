@@ -61,6 +61,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'karitemus.urls'
 
@@ -151,6 +152,11 @@ AUTHENTICATION_BACKENDS = (
   'social_core.backends.google.GoogleOAuth2',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+    ],
+}
 
 load_dotenv(dotenv_path=BASE_DIR+'\\.env', verbose=True)
 

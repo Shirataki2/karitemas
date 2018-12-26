@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   data () {
     return {
@@ -44,14 +42,6 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    axios
-      .get('/api/users')
-      .then((res) => {
-        this.userList = res.data
-      })
-      .catch((err) => {
-        console.log(err)
-      })
   },
   methods: {
     logout () {

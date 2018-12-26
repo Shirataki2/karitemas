@@ -17,8 +17,7 @@ class UserGroup(models.Model):
         default=STATUS_PRIVATE,
         max_length=30
     )
-
     users = models.ManyToManyField(
         User,
-        null=True
+        related_name="user_groups"
     )

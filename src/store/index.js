@@ -44,6 +44,13 @@ export default new Vuex.Store({
     email (state, getters) {
       const user = getters.user
       return `${user.email}`
+    },
+    groups (state, getters) {
+      const user = getters.user
+      return user.groups
+    },
+    token () {
+      return {Authorization: `Token ${localStorage.getItem('vue-authenticate.vueauth_token')}`}
     }
   },
   mutations: {
@@ -56,10 +63,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    checkToken: function ({ dispatch, commit, state }, router) {
-      const token = localStorage.getItem('vue-authenticate.vueauth_token')
+    checkToken: function ({ dispatch, commit, getters, state }, router) {
       return axios.post('http://localhost:8000/api/check/', {
-        'token': token
+        token: localStorage.getItem('vue-authenticate.vueauth_token')
       }).then((res) => {
         if (res.data.status === 'TOKEN_NOTFOUND') {
           dispatch('logout', router)
@@ -67,7 +73,7 @@ export default new Vuex.Store({
           commit('login', res.data)
         }
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
         dispatch('logout', router)
       })
     },
@@ -93,18 +99,19 @@ export default new Vuex.Store({
         commit('logout')
         router.push('/')
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
       })
     },
-    getUserById: function ({ commit }, id) {
-      return axios.post('http://localhost:8000/api/uget/', {
-        'id': id
-      }).then((res) => {
-        console.log(res)
-        return res.data
-      }).catch(() => {
-        return ''
+    getUserById: function ({commit}, id) {
+      return axios.get(`http://localhost:8000/api/user/${id}`, {
+        headers: this.$store.getters.token
       })
+        .then((res) => {
+          console.log(res)
+          return res.data
+        }).catch(() => {
+          return ''
+        })
     }
   }
 })

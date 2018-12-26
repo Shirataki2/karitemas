@@ -114,19 +114,20 @@ export default {
     user: null
   }),
   beforeCreate () {
-    axios.post('http://localhost:8000/api/uget/', {
-      'id': this.$store.getters.user.id
-    }).then((res) => {
-      console.log(res)
-      if (res.data.status === 'USER_NOTFOUND') {
-        this.$router.push('/404')
-      }
-      this.user = (JSON.parse(res.data.user)[0]).fields
-      console.log((JSON.parse(res.data.user)[0]).fields)
-      this.updateUser.name = this.user.username
-      this.updateUser.email = this.user.email
-      this.oldUser = Object.assign({}, this.updateUser)
+    axios.post(`http://localhost:8000/api/user/${this.$store.getters.user.id}/`, {
+      token: this.$store.getters.token
     })
+      .then((res) => {
+        console.log(res)
+        if (res.data.status === 'USER_NOTFOUND') {
+          this.$router.push('/404')
+        }
+        this.user = (JSON.parse(res.data.user)[0]).fields
+        console.log((JSON.parse(res.data.user)[0]).fields)
+        this.updateUser.name = this.user.username
+        this.updateUser.email = this.user.email
+        this.oldUser = Object.assign({}, this.updateUser)
+      })
   },
   computed: {
     nameError () {

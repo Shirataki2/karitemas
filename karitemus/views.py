@@ -10,6 +10,7 @@ from main.models import User
 @csrf_exempt
 @api_view(['POST'])
 def check_token(request):
+    print(request.user)
     user = Token.objects.filter(key=request.data['token'])
     token = user.exists()
     if not token:

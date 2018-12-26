@@ -9,8 +9,16 @@
               <v-img src="https://pbs.twimg.com/profile_images/1076916401061879808/8-GIsbaN.jpg" alt="avatar"/>
             </v-avatar>
           </v-flex>
-          <v-card-title primary-title class="mt-2 mx-auto headline">
-            {{ this.user !== null ? this.user.fields.username : ''}}
+          <v-card-title primary-title class="mt-2 mx-auto headline xs12">
+            <p>{{ this.user !== null ? this.user.username : ''}}</p>
+          </v-card-title>
+        </v-layout>
+        <v-layout row wrap>
+          <v-card-title primary-title class="ml-3 mt-2 xs12">
+            <v-card-text
+              class="display-1 xs12 font-weight-medium darken-1 heading">
+              参加グループ
+            </v-card-text>
           </v-card-title>
         </v-layout>
       </v-card>
@@ -27,20 +35,23 @@ Vue.use(VueAxios, axios)
 export default {
   name: 'User',
   data: () => ({
-    user: null
+    user: null,
+    groupList: []
   }),
   beforeCreate () {
     console.log(this.$route.params.id)
-    axios.post('http://localhost:8000/api/uget/', {
-      'id': this.$route.params.id
-    }).then((res) => {
-      console.log(res)
-      if (res.data.status === 'USER_NOTFOUND') {
-        this.$router.push('/404')
-      }
-      this.user = JSON.parse(res.data.user)[0]
-      console.log(JSON.parse(res.data.user)[0])
+    axios.get('http://localhost:8000/api/user/' + this.$route.params.id, {
+      headers: this.$store.getters.token
     })
+      .then((res) => {
+        if (res.data.status === 'USER_NOTFOUND') {
+          this.$router.push('/404')
+        }
+        console.log(res.data)
+        this.user = res.data[0]
+        this.groupList = this.user.user_groups
+        console.log(this.user)
+      })
   },
   methods: {
   }

@@ -84,10 +84,12 @@ export default {
   beforeCreate: function () {
     this.$store.dispatch('checkToken', this.$router).then(() => {
       console.log('Check token')
+    }).catch((err) => {
+      console.error(err)
     })
   },
   computed: {
-    color () {
+    color: function () {
       return 'white'
     }
   },
@@ -103,12 +105,17 @@ export default {
 
 <style lang="scss">
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 
-p, div{
-  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+h1, h2, h3, h4, h5, h6, p, .display-1, .display-2, .display-3, .display-4, span {
+  font-family: 'Noto Sans Japanese', sans-serif!important;
 }
 
-*::-webkit-scrollbar{
-    display:none;
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.heading {
+  color: royalblue;
 }
 </style>
