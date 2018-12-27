@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserGroup
+from .models import User, UserGroup, Config
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -15,8 +15,9 @@ class GroupSerializer(serializers.ModelSerializer):
         )
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     user_groups = GroupSerializer(many=True, read_only=True)
+    avatar = serializers.ImageField(source='config.avatar')
 
     class Meta:
         model = User
@@ -31,5 +32,17 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'is_staff',
             'is_active',
-            'user_groups'
+            'user_groups',
+            'avatar'
         )
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items:
+            if attr == 'image':
+                image = Config.objects.get(user=instance)
+                image.avatar = validated_data.get('image')['avatar']
+                image.save()
+            elif attr == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, attr, value)

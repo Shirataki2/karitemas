@@ -21,3 +21,11 @@ class UserGroup(models.Model):
         User,
         related_name="user_groups"
     )
+
+
+class Config(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(
+        upload_to='images/',
+        default='https://pbs.twimg.com/profile_images/1076916401061879808/8-GIsbaN.jpg'
+    )
