@@ -6,6 +6,7 @@ import Notification from '@/components/Notification'
 import Settings from '@/components/Settings'
 import User from '@/components/User'
 import Err404 from '@/components/Err404'
+import GroupView from '@/components/GroupView'
 Vue.use(Router)
 
 export default new Router({
@@ -19,6 +20,11 @@ export default new Router({
       path: '/group',
       name: 'Group',
       component: Group
+    },
+    {
+      path: '/group/:id',
+      name: 'GroupView',
+      component: GroupView
     },
     {
       path: '/notification',
@@ -37,12 +43,12 @@ export default new Router({
     },
     {
       path: '/404',
-      name: 'NotFound',
+      name: 'PageNotFound',
       component: Err404
     },
     {
       path: '*',
-      name: 'NotFound',
+      name: 'DidNotMatchAnyCase',
       component: Err404
     }
   ],

@@ -61,6 +61,8 @@
                   @input="$v.updateUser.password_confirmation.$touch()"
                   @blur="$v.updateUser.password_confirmation.$touch()"
                 />
+                <v-btn @click="submitData" class="primary">更新</v-btn>
+                <v-btn @click="clearData" class="secondary">クリア</v-btn>
               </form>
             </v-card-text>
           </v-container>
@@ -100,30 +102,28 @@ export default {
       email: '',
       old_password: '',
       new_password: '',
-      password_confirmation: '',
-      agreeTerms: false
+      password_confirmation: ''
     },
     oldUser: {
       name: '',
       email: '',
       old_password: '',
       new_password: '',
-      password_confirmation: '',
-      agreeTerms: false
+      password_confirmation: ''
     },
     user: null
   }),
   beforeCreate () {
-    axios.post(`http://localhost:8000/api/user/${this.$store.getters.user.id}/`, {
-      token: this.$store.getters.token
+    axios.get(`http://localhost:8000/api/user/${this.$store.getters.user.id}`, {
+      headers: this.$store.getters.token
     })
       .then((res) => {
         console.log(res)
         if (res.data.status === 'USER_NOTFOUND') {
           this.$router.push('/404')
         }
-        this.user = (JSON.parse(res.data.user)[0]).fields
-        console.log((JSON.parse(res.data.user)[0]).fields)
+        this.user = res.data
+        console.log(res.data)
         this.updateUser.name = this.user.username
         this.updateUser.email = this.user.email
         this.oldUser = Object.assign({}, this.updateUser)
@@ -157,14 +157,12 @@ export default {
       if (!this.$v.updateUser.new_password.$dirty) return errors
       !this.$v.updateUser.new_password.minLength && errors.push('6文字以上で入力してください')
       !this.$v.updateUser.new_password.alphaNum && errors.push('英字,数字のみを使用してください')
-      !this.$v.updateUser.new_password.required && errors.push('必須項目です')
       return errors
     },
     passwordConfirmError () {
       const errors = []
       if (!this.$v.updateUser.password_confirmation.$dirty) return errors
       !this.$v.updateUser.password_confirmation.sameAs && errors.push('一致しません')
-      !this.$v.updateUser.password_confirmation.required && errors.push('必須項目です')
       return errors
     }
   },
@@ -178,6 +176,36 @@ export default {
       }
     } else {
       next()
+    }
+  },
+  methods: {
+    submitData () {
+      this.$v.$touch()
+      console.log('PATCH-1')
+      if (!this.$v.$pending && !this.$v.$error) {
+        console.log('PATCH')
+        axios.patch(`http://localhost:8000/api/user/${this.user.id}`, {
+          username: this.updateUser.name
+        }, {
+          headers: this.$store.getters.token
+        }).then((res) => {
+          console.log(res)
+          this.oldUser = Object.assign({}, this.updateUser)
+        }).catch((err) => {
+          console.error(err)
+        })
+      }
+    },
+    clearData () {
+      console.log(this.$v)
+      this.$v.$reset()
+      this.updateUser = {
+        name: '',
+        email: '',
+        old_password: '',
+        new_password: '',
+        password_confirmation: ''
+      }
     }
   }
 }

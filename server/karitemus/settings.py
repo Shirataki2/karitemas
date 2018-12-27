@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
+CSRF_COOKIE_SECURE = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -158,7 +159,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-load_dotenv(dotenv_path=BASE_DIR+'\\.env', verbose=True)
+load_dotenv(dotenv_path=BASE_DIR+'\\..\\.env', verbose=True)
 
 LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_TWITTER_KEY = os.environ.get("SOCIAL_AUTH_TWITTER_KEY")

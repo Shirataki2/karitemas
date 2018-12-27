@@ -39,13 +39,16 @@ export default {
   },
   methods: {
     getPageId: function (path) {
-      const path2id = {
-        '/group': 1,
-        '/notification': 2,
-        '/setting': 3
+      if (/\/group\/?[0-9]*\/?/.test(path)) {
+        return 1
       }
-      const idx = path in path2id ? path2id[path] : 0
-      return idx
+      if (path === '/notification') {
+        return 2
+      }
+      if (path === '/setting') {
+        return 3
+      }
+      return 0
     }
   }
 }

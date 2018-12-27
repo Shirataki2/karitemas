@@ -107,7 +107,7 @@ export default {
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 
-h1, h2, h3, h4, h5, h6, p, .display-1, .display-2, .display-3, .display-4, span {
+h1, h2, h3, h4, h5, h6, p, .title, .display-1, .display-2, .display-3, .display-4, span, div {
   font-family: 'Noto Sans Japanese', sans-serif!important;
 }
 

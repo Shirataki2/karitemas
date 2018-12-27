@@ -21,6 +21,32 @@
             </v-card-text>
           </v-card-title>
         </v-layout>
+            <v-container grid-list-md text-xs-center w100>
+              <v-layout row wrap>
+                <template v-for="group in groupList">
+                  <v-flex xs12 sm6 lg4 :key="group.id">
+                    <v-card class="elevation-2 link" @click="goGroupPage(group.id)">
+                      <v-card-title class="title">
+                        {{ group.name }}
+                      </v-card-title>
+                      <v-card-title text-left>
+                        <template v-if="group.status === 'private'">
+                          <v-icon xs1 class="ml-1 subheading text-left">fas fa-lock</v-icon>
+                          <p class="xs10 offset-1 mt-3 grey--text">Private</p>
+                        </template>
+                        <template v-else>
+                          <v-icon xs1 class="ml-1 subheading text-left">fas fa-globe-asia</v-icon>
+                          <p class="xs10 offset-1 mt-3 grey--text">Public</p>
+                        </template>
+                        <p class="text-right align-right offset-7 mr-0 mt-3 grey--text">
+                          {{ group.users.length }}
+                        </p>
+                      </v-card-title>
+                    </v-card>
+                  </v-flex>
+                </template>
+              </v-layout>
+            </v-container>
       </v-card>
     </v-container>
   </div>
@@ -48,12 +74,15 @@ export default {
           this.$router.push('/404')
         }
         console.log(res.data)
-        this.user = res.data[0]
+        this.user = res.data
         this.groupList = this.user.user_groups
-        console.log(this.user)
+        console.log(this.groupList)
       })
   },
   methods: {
+    goGroupPage (id) {
+      this.$router.push(`/group/${id}`)
+    }
   }
 }
 </script>
@@ -66,5 +95,8 @@ export default {
   .my-avatar{
     position: relative;
     bottom: -20px;
+  }
+  .link {
+    cursor: pointer;
   }
 </style>
