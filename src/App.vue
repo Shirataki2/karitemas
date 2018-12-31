@@ -82,8 +82,9 @@ export default {
     source: String
   },
   beforeCreate: function () {
+    console.log(process.env)
     this.$store.dispatch('checkToken', this.$router).then(() => {
-      console.log('Check token')
+      console.log('Token checked')
     }).catch((err) => {
       console.error(err)
     })

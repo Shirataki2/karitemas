@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from .views import index, check_token, delete_token, get_user_by_id
 
 urlpatterns = list([
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('main.urls')),
     path('auth/', include('rest_framework_social_oauth2.urls')),

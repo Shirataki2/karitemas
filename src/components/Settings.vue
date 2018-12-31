@@ -89,7 +89,7 @@ export default {
     updateUser: {
       name: {required, maxLength: maxLength(32)},
       email: {required, email},
-      old_password: {required, minLength: minLength(6), alphaNum},
+      old_password: {minLength: minLength(6), alphaNum},
       new_password: {minLength: minLength(6), alphaNum},
       password_confirmation: {sameAs: sameAs('new_password')}
     }
@@ -114,7 +114,7 @@ export default {
     user: null
   }),
   beforeCreate () {
-    axios.get(`http://localhost:8000/api/user/${this.$store.getters.user.id}`, {
+    axios.get(`${process.env.API_URL}/api/user/${this.$store.getters.user.id}`, {
       headers: this.$store.getters.token
     })
       .then((res) => {
@@ -149,7 +149,6 @@ export default {
       if (!this.$v.updateUser.old_password.$dirty) return errors
       !this.$v.updateUser.old_password.minLength && errors.push('6文字以上で入力してください')
       !this.$v.updateUser.old_password.alphaNum && errors.push('英字,数字のみを使用してください')
-      !this.$v.updateUser.old_password.required && errors.push('必須項目です')
       return errors
     },
     passwordError () {
@@ -184,7 +183,7 @@ export default {
       console.log('PATCH-1')
       if (!this.$v.$pending && !this.$v.$error) {
         console.log('PATCH')
-        axios.patch(`http://localhost:8000/api/user/${this.user.id}`, {
+        axios.patch(`${process.env.API_URL}/api/user/${this.user.id}`, {
           username: this.updateUser.name
         }, {
           headers: this.$store.getters.token

@@ -24,7 +24,7 @@
             <v-container grid-list-md text-xs-center w100>
               <v-layout row wrap>
                 <template v-for="group in groupList">
-                  <v-flex xs12 sm6 lg4 :key="group.id">
+                  <v-flex xs12 sm6 md4 :key="group.id">
                     <v-card class="elevation-2 link" @click="goGroupPage(group.id)">
                       <v-card-title class="title">
                         {{ group.name }}
@@ -32,13 +32,13 @@
                       <v-card-title text-left>
                         <template v-if="group.status === 'private'">
                           <v-icon xs1 class="ml-1 subheading text-left">fas fa-lock</v-icon>
-                          <p class="xs10 offset-1 mt-3 grey--text">Private</p>
+                          <p class="xs9 offset-1 mt-3 grey--text">Private</p>
                         </template>
                         <template v-else>
                           <v-icon xs1 class="ml-1 subheading text-left">fas fa-globe-asia</v-icon>
                           <p class="xs10 offset-1 mt-3 grey--text">Public</p>
                         </template>
-                        <p class="text-right align-right offset-7 mr-0 mt-3 grey--text">
+                        <p class="text-right align-right offset-6 mr-1 mt-3 grey--text">
                           {{ group.users.length }}
                         </p>
                       </v-card-title>
@@ -65,19 +65,26 @@ export default {
     groupList: []
   }),
   beforeCreate () {
-    console.log(this.$route.params.id)
-    axios.get('http://localhost:8000/api/user/' + this.$route.params.id, {
-      headers: this.$store.getters.token
-    })
-      .then((res) => {
+    console.log(this.$store.getters.token)
+    this.$store.dispatch('checkToken', this.$router).then(() => {
+      console.log(this.$store.getters.token)
+    }).then(() => {
+      axios.get(`${process.env.API_URL}/api/user/${this.$route.params.id}`, {
+        headers: this.$store.getters.token
+      }).then((res) => {
+        console.log(res)
+        console.log(this.$store.getters.token)
         if (res.data.status === 'USER_NOTFOUND') {
           this.$router.push('/404')
         }
-        console.log(res.data)
         this.user = res.data
         this.groupList = this.user.user_groups
         console.log(this.groupList)
+      }).catch((err) => {
+        console.error(err)
+        location.reload()
       })
+    })
   },
   methods: {
     goGroupPage (id) {

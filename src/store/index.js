@@ -1,21 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VueAuthenticate from 'vue-authenticate'
 import VueFlashMessage from 'vue-flash-message'
 import axios from 'axios'
 
 Vue.use(VueFlashMessage)
 Vue.use(Vuex)
-Vue.use(VueAuthenticate, {
-  baseUrl: 'http://localhost:8000',
-  providers: {
-    google: {
-      clientId: '119829735039-0ifjvbtvacv39c9u65dbjd46o5bf1l6b.apps.googleusercontent.com',
-      redirectUri: 'http://localhost:8080/',
-      url: 'http://localhost:8000/api/login/social/token/google/'
-    }
-  }
-})
 
 export default new Vuex.Store({
   state: {
@@ -26,8 +15,9 @@ export default new Vuex.Store({
       if (!getters.isLogin) {
         return ''
       }
-      const user = JSON.parse(state.currentUser.user)[0].fields
-      user.id = JSON.parse(state.currentUser.user)[0].pk
+      const data = JSON.parse(state.currentUser.user)[0]
+      const user = data.fields
+      user.id = data.pk
       return user
     },
     isLogin (state) {
@@ -51,6 +41,7 @@ export default new Vuex.Store({
     },
     token () {
       return {Authorization: `Token ${localStorage.getItem('vue-authenticate.vueauth_token')}`}
+      // return {code: `${localStorage.getItem('vue-authenticate.vueauth_token')}`}
     }
   },
   mutations: {
@@ -64,13 +55,17 @@ export default new Vuex.Store({
   },
   actions: {
     checkToken: function ({ dispatch, commit, getters, state }, router) {
-      return axios.post('http://localhost:8000/api/check/', {
+      console.log('Token check started')
+      return axios.post(`${process.env.API_URL}/api/check/`, {
         token: localStorage.getItem('vue-authenticate.vueauth_token')
       }).then((res) => {
+        console.log(res)
         if (res.data.status === 'TOKEN_NOTFOUND') {
           dispatch('logout', router)
         } else {
+          console.log('Authorized')
           commit('login', res.data)
+          console.log(getters.user)
         }
       }).catch((err) => {
         console.error(err)
@@ -82,18 +77,21 @@ export default new Vuex.Store({
 
       return auth
         .authenticate('google', {provider: 'google-oauth2'})
-        .then(function () {
+        .then((res) => {
+          console.log(res)
           dispatch('checkToken', router).then(() => {
             console.log(getters.user)
+            console.log('Move to User page')
             router.push('user/' + getters.user.id)
           })
+        }).then(() => {
         })
         .catch((err) => {
           console.error(err)
         })
     },
     logout: function ({commit}, router) {
-      return axios.post('http://localhost:8000/api/delete_token/', {
+      return axios.post(`${process.env.API_URL}/api/delete_token/`, {
         'token': localStorage.getItem('vue-authenticate.vueauth_token')
       }).then(() => {
         commit('logout')
@@ -103,7 +101,7 @@ export default new Vuex.Store({
       })
     },
     getUserById: function ({commit}, id) {
-      return axios.get(`http://localhost:8000/api/user/${id}`, {
+      return axios.get(`${process.env.API_URL}/api/user/${id}`, {
         headers: this.$store.getters.token
       })
         .then((res) => {

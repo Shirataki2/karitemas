@@ -12,7 +12,7 @@ export default {
   }),
   methods: {
     checkToken: function (provider, redirect) {
-      axios.post('http://localhost:8000/api/check/', {
+      axios.post(`${process.env.API_URL}/api/check/`, {
         'token': localStorage.getItem('vue-authenticate.vueauth_token')
       }).then((res) => {
         const path = (res.data.status) ? true : '/'

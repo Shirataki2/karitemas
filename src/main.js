@@ -24,17 +24,32 @@ Vue.use(VueAxios, axios)
 Vue.use(Vuelidate)
 Vue.use(VueFlashMessage)
 Vue.use(VueAuthenticate, {
-  baseUrl: 'http://localhost:8000',
+  baseUrl: process.env.API_URL,
+  bindRequestInterceptor () {
+    this.$http.interceptors.request.use((config) => {
+      if (this.isAuthenticated()) {
+        config.headers.Authorization = [this.options.tokenType, this.getToken()].join(' ')
+      } else {
+        delete config.headers.Authorization
+      }
+      return config
+    })
+  },
+  bindResponseInterceptor () {
+    this.$http.interceptors.response.use((response) => {
+      this.setToken(response)
+      return response
+    })
+  },
   providers: {
     google: {
       clientId: '119829735039-0ifjvbtvacv39c9u65dbjd46o5bf1l6b.apps.googleusercontent.com',
-      redirectUri: 'http://localhost:8080/',
-      url: 'http://localhost:8000/api/login/social/token/google/'
+      redirectUri: process.env.SERVER_URL,
+      url: `${process.env.API_URL}/api/login/social/token/google/`
     }
   }
 })
 Vue.config.productionTip = false
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
